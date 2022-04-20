@@ -41,7 +41,7 @@ class ATM_Process : public ATM_Cash, public Customer_Details
         void set_user_details(int acc_num, int pin_num);
         void user_validation(int a_num,int p_num);
         void withdraw_money();
-        void transfer_money();
+        static void transfer_money();
 };
 
 // class NegativeValueException
