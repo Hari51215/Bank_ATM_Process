@@ -147,7 +147,7 @@ class ATM_Process : public ATM_Cash, public Customer_Details
 
         void withdraw_money()
         {
-            int withdraw_amount,ATM_pin_num;
+            int withdraw_amount,ATM_pin_num,value=0,rem=0,temp=0;
             cout<<"Enter the Pin Number : ";
             cin>>ATM_pin_num;
             if(user_data[id].Pin_number==ATM_pin_num)
@@ -166,49 +166,52 @@ class ATM_Process : public ATM_Cash, public Customer_Details
                         {
                             if(withdraw_amount<=5000)
                             {
-                                if(withdraw_amount>3000)
+                                temp=withdraw_amount;
+                                if(temp>3000)
                                 {
-                                    withdraw_amount-=2000;
-                                    Two_thousand-=1;
-                                    if(withdraw_amount>1500 && (withdraw_amount-1500)>=1000)
-                                    {
-                                        withdraw_amount-=1500;
-                                        Hundred-=15;
-                                        if(withdraw_amount>1000)
-                                        {
-                                            withdraw_amount-=1500;
-                                            Five_hundred-=3;
-                                        }
-                                    }
-                                    else 
-                                    {
-                                        if(withdraw_amount>1000)
-                                        {
-                                            withdraw_amount-=1000;
-                                            Hundred-=10;
-                                        }
-                                        else
-                                        {
-                                            if(withdraw_amount<1000)
-                                            {
-                                                withdraw_amount-=500;
-                                                Five_hundred-=1;
-                                            }
-                                        }
-                                    }
-            
+                                    value=temp/2000;
+                                    temp-=2000*value;
+                                    Two_thousand-=value;
+                                }
+                                if(temp>1000)
+                                {
+                                    value=temp/500;
+                                    temp-=500*value;
+                                    Five_hundred-=value;
+                                }
+                                if(temp>1500)
+                                {
+                                    value=temp/100;
+                                    temp-=100*value;
+                                    Hundred-=value;   
                                 }
                                 else
                                 {
-                                    ;
+                                    value=temp/100;
+                                    temp-=100*value;
+                                    Hundred-=value;   
                                 }
                             }
                             else
                             {
-                                ;
-                                // 2000₹ X 2
-                                // 500₹ X 2 (increase for higher amounts)
-                                // 100₹ X 10 (Maximum 10 numbers)
+                                if(withdraw_amount>5000)
+                                {
+                                    value=withdraw_amount/2000;
+                                    rem=withdraw_amount%2000;
+                                    Two_thousand-=value; 
+                                }
+                                if(rem>=500)
+                                {
+                                    value=rem/500;
+                                    rem=rem%500;
+                                    Five_hundred-=value;
+                                }
+                                if(rem<500)
+                                {
+                                    value=rem/100;
+                                    rem=rem%100;
+                                    Hundred-=value;
+                                }
                             }
                             user_data[id].Account_balance-=withdraw_amount;
                         }
