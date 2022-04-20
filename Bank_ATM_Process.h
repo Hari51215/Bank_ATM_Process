@@ -22,7 +22,7 @@ class Customer_Details
         void check_account_balance();
 };
 
-class ATM_Cash : public Customer_Details
+class ATM_Cash
 {
     protected:
         double ATM_balance;
