@@ -5,6 +5,8 @@
 #include<iomanip>
 #include "Bank_ATM_Process.h"
 
+using namespace std;
+
 int main()
 {
     int acc_num,pin_num,users_count;
