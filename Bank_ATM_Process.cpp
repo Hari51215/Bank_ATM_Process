@@ -1,7 +1,9 @@
 #include<iostream>
 #include<string>
 #include<vector>
+#include<cstdlib>
 #include<iomanip>
+#include "Bank_ATM_Process.h"
 
 using namespace std;
 
