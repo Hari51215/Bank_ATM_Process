@@ -132,7 +132,7 @@ class ATM_Process : public ATM_Cash, public Customer_Details
                             user_data[id].transfer_money();
                             break;
                     case 4:
-                            user.check_atm_balance();
+                            check_atm_balance();
                             break;
                     default:
                         cout<<"Invalid Option . . !\nChoose the Correct option Again"<<endl;
