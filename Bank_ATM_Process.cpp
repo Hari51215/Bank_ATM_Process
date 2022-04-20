@@ -6,7 +6,6 @@
 #include "Bank_ATM_Process.h"
 
 using namespace std;
-vector<Customer_Details> user_data;
 
 class Customer_Details
 {
@@ -42,6 +41,8 @@ class Customer_Details
             cout<<Account_holder<<"'s "<<"Account Balance : "<<Account_balance<<endl;
         }
 };
+
+vector<Customer_Details> user_data;
 
 class ATM_Cash
 {
@@ -108,7 +109,7 @@ class ATM_Process : public ATM_Cash, public Customer_Details
             
             for(i=0;i<user_data.size();i++)
             {
-                if(user_data[i].Account_number==User_acc_num && Pin_number==User_pin_num)
+                if(user_data[i].Account_number==User_acc_num && user_data[i].Pin_number==User_pin_num)
                 {
                     id=i;
                     break;
