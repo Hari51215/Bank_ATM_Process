@@ -6,6 +6,7 @@
 #include "Bank_ATM_Process.h"
 
 using namespace std;
+vector<Customer_Details> user_data;
 
 class Customer_Details
 {
@@ -41,8 +42,6 @@ class Customer_Details
             cout<<Account_holder<<"'s "<<"Account Balance : "<<Account_balance<<endl;
         }
 };
-
-vector<Customer_Details> user_data;
 
 class ATM_Cash
 {
@@ -109,7 +108,7 @@ class ATM_Process : public ATM_Cash, public Customer_Details
             
             for(i=0;i<user_data.size();i++)
             {
-                if(Account_number[i]==User_acc_num && Pin_number[i]==User_pin_num)
+                if(user_data[i].Account_number==User_acc_num && Pin_number==User_pin_num)
                 {
                     id=i;
                     break;
@@ -151,17 +150,17 @@ class ATM_Process : public ATM_Cash, public Customer_Details
             int withdraw_amount,ATM_pin_num;
             cout<<"Enter the Pin Number : ";
             cin>>ATM_pin_num;
-            if(Pin_number[id]==ATM_pin_num)
+            if(user_data[id].Pin_number==ATM_pin_num)
             {
                 cout<<"Enter the Amount to be Withdrawn : ";
                 cin>>withdraw_amount;
                 if(withdraw_amount>=100 && withdraw_amount<=10000)
                 {
                     if(ATM_balance<withdraw_amount)
-                        cout<<"ATM Balance Low"<<end;
+                        cout<<"ATM Balance Low"<<endl;
                     else
                     {
-                        if(Account_balance[i]<withdraw_amount)
+                        if(user_data[id].Account_number<withdraw_amount)
                             cout<<"Your Account Balance is low"<<endl;
                         else
                         {
@@ -211,7 +210,7 @@ class ATM_Process : public ATM_Cash, public Customer_Details
                                 // 500₹ X 2 (increase for higher amounts)
                                 // 100₹ X 10 (Maximum 10 numbers)
                             }
-                            Account_balance[id]-=withdraw_amount;
+                            user_data[id].Account_balance-=withdraw_amount;
                         }
                         ATM_balance-=withdraw_amount;
                     }
@@ -232,7 +231,7 @@ class ATM_Process : public ATM_Cash, public Customer_Details
                 
             for(int i=0;i<user_data.size();i++)
             {
-                if(Account_number[i]==Bank_acc_num)
+                if(user_data[i].Account_number==Bank_acc_num)
                 {
                     id_no=i;
                     break;
@@ -247,8 +246,8 @@ class ATM_Process : public ATM_Cash, public Customer_Details
                     cout<<"Transfer limit per transaction is, Maximum = 10,000 ₹ and Minimum = 1000 ₹"<<endl;
                 else
                 {
-                    Account_balance[id_no]+=Money_transfer;
-                    Account_balance[id]-=Money_transfer;
+                    user_data[id_no].Account_balance+=Money_transfer;
+                    user_data[id].Account_balance-=Money_transfer;
                 }
             }
             else

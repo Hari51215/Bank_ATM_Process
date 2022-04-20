@@ -7,6 +7,7 @@
 #include<iomanip>
 
 using namespace std;
+vector<Customer_Details> user_data;
 
 class Customer_Details
 {
@@ -20,8 +21,6 @@ class Customer_Details
         void display_details();
         void check_account_balance();
 };
-
-vector<Customer_Details> user_data;
 
 class ATM_Cash : public Customer_Details
 {
