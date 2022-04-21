@@ -1,0 +1,8 @@
+Money Feeded into the ATM, Dispalying it's Denominations.
+
+Denomination        Number              Value               
+2000                20                  40000               
+500                 50                  25000               
+100                 50                  5000                
+
+ATM Balance = 70000
