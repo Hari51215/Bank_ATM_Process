@@ -42,7 +42,6 @@ class Customer_Details
         }
 };
 
-vector<Customer_Details> user_data;
 
 class ATM_Cash
 {
