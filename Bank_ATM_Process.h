@@ -7,7 +7,7 @@
 using namespace std;
 class Customer_Details;
 
-double ATM_balance=0;
+double ATM_balance=0,symbol;
 int Two_thousand=0, Five_hundred=0, Hundred=0;
 vector<Customer_Details> user_data;
 
@@ -29,17 +29,36 @@ class Customer_Details
 
         void Show_Customer_Details()
         {
-            fstream Details;
-            Details.open("Customer_Details.txt",ios::out);
+            ofstream Details;
+            Details.open("Customer_Details.txt",ios::app);
             if(Details.is_open())
             {    
                 for(int i=0;i<user_data.size();i++)
                 {
-                        Details<<left<<setw(20)<<user_data[i].Account_number<<left<<setw(20)<<user_data[i].Account_holder<<left<<setw(20)<<user_data[i].Pin_number<<left<<user_data[i].Account_balance<<" ₹"<<endl;
+                        Details<<user_data[i].Account_number<<"   "<<user_data[i].Account_holder<<"   "<<user_data[i].Pin_number<<"   "<<user_data[i].Account_balance<<" ₹"<<endl;
                 }
                 Details.close();
             }
             cout<<endl<<"Customer Detail Database is Stored in the Customer_Details.txt file"<<endl;
+        }
+
+        void Read_Customer_Details()
+        {
+            fstream Details;
+            Details.open("Customer_Details.txt",ios::in);
+            if(Details.is_open())
+            {    
+                while(Details>>Account_number>>Account_holder>>Pin_number>>Account_balance>>symbol)
+                {
+                    user_data.push_back(Customer_Details(Account_number,Account_holder,Pin_number,Account_balance));
+                }
+                Details.close();
+            }
+
+            for(int i=0;i<user_data.size();i++)
+            {
+                cout<<user_data[i].Account_holder<<"'s "<<"Account Balance : "<<user_data[i].Account_balance<<endl;
+            }
         }
 
         void check_account_balance()
@@ -131,7 +150,7 @@ class Customer_Details
 
         void transfer_money()
         {
-            int id_no,symbol;
+            int id_no;
             int Money_transfer,Bank_acc_num;
             cout<<"Account Number to which the money has to be transferred : ";
             cin>>Bank_acc_num;
@@ -222,7 +241,6 @@ class ATM_Process : public Customer_Details
 
         int using_ATM(int a_num,int p_num)
         {
-            int symbol;
             User_acc_num=a_num;
             User_pin_num=p_num;
 
