@@ -48,14 +48,14 @@ int main()
                             user_data.push_back(Customer_Details(acc_num,acc_name,pin_num,acc_bal));
                             cout<<endl;
                         }
-                    }
-                    else if(data=='Y')
-                    {
                         user.Show_Customer_Details();
+                    }
+                    else if(data=='N')
+                    {
+                        user.Read_Customer_Details();
                     }
                     else
                         cout<<"Oops..!, Invalid Input : Kindly enter Y or N only."<<endl;
-                    user.Show_Customer_Details();
                     break;
             case 3:
                     cout<<"Hi User, Welcome to Zoho Corporation Bank"<<endl;
