@@ -8,17 +8,17 @@
 using namespace std;
 class Customer_Details;
 
-double ATM_balance;
-int Two_thousand=0, Five_hundred=0, Hundred=0;
+int Two_thousand=0, Five_hundred=0, Hundred=0, ATM_balance=0;
 vector<Customer_Details> user_data;
 vector<int> ATM_Cash;
+int id;
 
 class Customer_Details
 {
     public:
-        int Account_number;
-        int Pin_number;
-        double Account_balance;
+        int Account_number=0;
+        int Pin_number=0;
+        double Account_balance=0;
         string Account_holder;
         Customer_Details(){}
         Customer_Details (int acc_num, string acc_name, int pin_num, double acc_bal)
@@ -36,7 +36,7 @@ class Customer_Details
             string name;
 
             fstream Details;
-            Details.open("Customer.txt",ios::in);
+            Details.open("Customer_Details.txt",ios::in);
             if(Details.is_open())
             {
                 while(Details>>num>>name>>pin>>bal)
@@ -179,7 +179,7 @@ class Customer_Details
                 else
                 {
                     user_data[id_no].Account_balance+=Money_transfer;
-                    Account_balance-=Money_transfer;
+                    user_data[id].Account_balance-=Money_transfer;
                     cout<<"Money Transfer Successfully."<<endl;
                 }
             }
@@ -193,24 +193,11 @@ class Customer_Details
 class ATM_Process : public Customer_Details
 {
     protected:
-        char Feed_cash;
-        int User_acc_num, User_pin_num;
+        int User_acc_num=0, User_pin_num=0;
     public:
-        int id;
         void Load_Cash()
         {
-            int note,number,total;
-            fstream Cash;
-            Cash.open("ATM_Cash.txt",ios::in);
-            if(Cash.is_open())
-            {
-                while(Cash>>note>>number>>total)
-                {
-                    ATM_Cash.push_back(total);
-                }
-                Cash.close();
-            }
-
+            char Feed_cash;
             cout<<"ATM Balance = "<<ATM_balance<<endl;
             cout<<"Is it Required to Feed the Money into the ATM (Y/N): ";
             cin>>Feed_cash;
@@ -229,18 +216,6 @@ class ATM_Process : public Customer_Details
                 Hundred+=H;
 
                 ATM_balance=(2000*Two_thousand) + (500*Five_hundred) + (100*Hundred);
-                
-                fstream Cash;
-                Cash.open("ATM_Cash.txt",ios::out);
-                if(Cash.is_open())
-                {
-                    Cash<<left<<setw(20)<<"2000"<<left<<setw(20)<<Two_thousand<<left<<setw(20)<<2000*Two_thousand<<endl;
-                    Cash<<left<<setw(20)<<"500"<<left<<setw(20)<<Five_hundred<<left<<setw(20)<<500*Five_hundred<<endl;
-                    Cash<<left<<setw(20)<<"100"<<left<<setw(20)<<Hundred<<left<<setw(20)<<100*Hundred<<endl;
-
-                    Cash<<endl<<"ATM Balance = "<<ATM_balance<<endl;
-                    Cash.close();
-                }
                 cout<<endl<<"Cash loaded into the ATM is Successfully and Stored in the ATM_Cash.txt file"<<endl;
             }
             else if(Feed_cash=='N')
@@ -280,11 +255,62 @@ class ATM_Process : public Customer_Details
 
         void check_atm_balance()
         {
-            cout<<endl<<left<<setw(20)<<"Denomination"<<left<<setw(20)<<"Number"<<left<<setw(20)<<"Value"<<endl;
-            cout<<left<<setw(20)<<"2000"<<left<<setw(20)<<Two_thousand<<left<<setw(20)<<2000*Two_thousand<<endl;
-            cout<<left<<setw(20)<<"500"<<left<<setw(20)<<Five_hundred<<left<<setw(20)<<500*Five_hundred<<endl;
-            cout<<left<<setw(20)<<"100"<<left<<setw(20)<<Hundred<<left<<setw(20)<<100*Hundred<<endl;
+            cout<<"Total Amount available in the ATM = "<<Read_ATM_Cash()<<" ₹"<<endl;
+        }
 
-            cout<<"Total Amount available in the ATM = "<<ATM_balance<<" ₹"<<endl;
+        void Write_Customer_Details()
+        {
+            fstream Details;
+            Details.open("Customer_Details.txt",ios::out);
+            if(Details.is_open())
+            {    
+                for(int i=0;i<user_data.size();i++)
+                {
+                        Details<<left<<setw(20)<<user_data[i].Account_number<<left<<setw(20)<<user_data[i].Account_holder<<left<<setw(20)<<user_data[i].Pin_number<<left<<user_data[i].Account_balance<<endl;
+                }
+                Details.close();
+            }
+        }
+
+        static int Read_ATM_Cash()
+        {
+            int note=0,number=0,total=0;
+
+            fstream Cash;
+            Cash.open("ATM_Cash.txt",ios::in);
+            if(Cash.is_open())
+            {
+                int a[3],i=0;
+                while(Cash>>note>>number>>total)
+                {
+                    a[i++]=number;
+                    ATM_Cash.push_back(total);
+                }
+                Cash.close();
+                
+                Two_thousand=a[0]; 
+                Five_hundred=a[1]; 
+                Hundred=a[2];
+            }
+            for(int i=0; i<ATM_Cash.size(); ++i)
+            {
+                ATM_balance += ATM_Cash[i];
+            }
+
+            return ATM_balance;
+        }
+
+        static void Write_ATM_Cash()
+        {
+            fstream Cash;
+            Cash.open("ATM_Cash.txt",ios::out);
+            if(Cash.is_open())
+            {
+                Cash<<left<<setw(20)<<"2000"<<left<<setw(20)<<Two_thousand<<left<<setw(20)<<2000*Two_thousand<<endl;
+                Cash<<left<<setw(20)<<"500"<<left<<setw(20)<<Five_hundred<<left<<setw(20)<<500*Five_hundred<<endl;
+                Cash<<left<<setw(20)<<"100"<<left<<setw(20)<<Hundred<<left<<setw(20)<<100*Hundred<<endl;
+
+                Cash.close();
+            }
         }
 };
