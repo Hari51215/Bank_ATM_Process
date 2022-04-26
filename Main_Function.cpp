@@ -1,5 +1,4 @@
 #include "Bank_ATM_Process.h"
-using namespace std;
 
 int main()
 {
@@ -13,6 +12,7 @@ int main()
     string acc_name;
     char data;
 
+    user.Read_Customer_Details();
     while(1)
     {
         cout<<"__________________________________________________________________________________________________";
@@ -26,36 +26,7 @@ int main()
                     user.Load_Cash();
                     break;
             case 2:
-                    cout<<"Do you need to include the Customer Details (Y/N) : ";
-                    cin>>data;
-
-                    if(data=='Y')
-                    {
-                        cout<<"Enter the Number of Customer Details to be stored into the Bank Database System : ";
-                        cin>>users_count;
-                        
-                        for(int i=0;i<users_count;i++)
-                        {
-                            cout<<endl<<"Enter the Account Number : ";
-                            cin>>acc_num;
-                            cout<<"Enter the Account Holder Name : ";
-                            cin>>acc_name;
-                            cout<<"Enter the ATM Pin Number of User : ";
-                            cin>>pin_num;
-                            cout<<"Enter the Account Balance in the User Account : ";
-                            cin>>acc_bal;
-                            
-                            user_data.push_back(Customer_Details(acc_num,acc_name,pin_num,acc_bal));
-                            cout<<endl;
-                        }
-                        user.Show_Customer_Details();
-                    }
-                    else if(data=='N')
-                    {
-                        user.Read_Customer_Details();
-                    }
-                    else
-                        cout<<"Oops..!, Invalid Input : Kindly enter Y or N only."<<endl;
+                    user.Show_Customer_Details();
                     break;
             case 3:
                     cout<<"Hi User, Welcome to Zoho Corporation Bank"<<endl;
