@@ -4,20 +4,22 @@
 #include<cstdlib>
 #include<iomanip>
 #include<fstream>
+
 using namespace std;
 class Customer_Details;
 
-double ATM_balance=0,symbol;
+double ATM_balance;
 int Two_thousand=0, Five_hundred=0, Hundred=0;
 vector<Customer_Details> user_data;
+vector<int> ATM_Cash;
 
 class Customer_Details
 {
     public:
-        int Account_number{0};
-        int Pin_number{0};
-        double Account_balance{0};
-        string Account_holder{NULL};
+        int Account_number;
+        int Pin_number;
+        double Account_balance;
+        string Account_holder;
         Customer_Details(){}
         Customer_Details (int acc_num, string acc_name, int pin_num, double acc_bal)
         {
@@ -27,37 +29,30 @@ class Customer_Details
             Account_balance = acc_bal;
         }
 
-        void Show_Customer_Details()
-        {
-            ofstream Details;
-            Details.open("Customer_Details.txt",ios::app);
-            if(Details.is_open())
-            {    
-                for(int i=0;i<user_data.size();i++)
-                {
-                        Details<<user_data[i].Account_number<<"   "<<user_data[i].Account_holder<<"   "<<user_data[i].Pin_number<<"   "<<user_data[i].Account_balance<<" ₹"<<endl;
-                }
-                Details.close();
-            }
-            cout<<endl<<"Customer Detail Database is Stored in the Customer_Details.txt file"<<endl;
-        }
-
         void Read_Customer_Details()
         {
+            int num,pin;
+            double bal;
+            string name;
+
             fstream Details;
-            Details.open("Customer_Details.txt",ios::in);
+            Details.open("Customer.txt",ios::in);
             if(Details.is_open())
-            {    
-                while(Details>>Account_number>>Account_holder>>Pin_number>>Account_balance>>symbol)
+            {
+                while(Details>>num>>name>>pin>>bal)
                 {
-                    user_data.push_back(Customer_Details(Account_number,Account_holder,Pin_number,Account_balance));
+                    user_data.push_back(Customer_Details(num,name,pin,bal));
                 }
                 Details.close();
             }
+        }
 
-            for(int i=0;i<user_data.size();i++)
+        void Show_Customer_Details()
+        {
+            cout<<endl<<left<<setw(20)<<"Account Number"<<left<<setw(20)<<"Account Holder"<<left<<setw(20)<<"Pin Number"<<left<<setw(20)<<"Account Balance"<<endl;
+            for(int i=0; i<user_data.size(); ++i)
             {
-                cout<<user_data[i].Account_holder<<"'s "<<"Account Balance : "<<user_data[i].Account_balance<<endl;
+                cout<<left<<setw(20)<<user_data[i].Account_number<<left<<setw(20)<<user_data[i].Account_holder<<left<<setw(20)<<user_data[i].Pin_number<<left<<setw(20)<<user_data[i].Account_balance<<endl;
             }
         }
 
@@ -150,11 +145,11 @@ class Customer_Details
 
         void transfer_money()
         {
-            int id_no;
+            int id_no,symbol;
             int Money_transfer,Bank_acc_num;
             cout<<"Account Number to which the money has to be transferred : ";
             cin>>Bank_acc_num;
-            
+
             fstream Details;
             Details.open("Customer_Details.txt",ios::in);
             if(Details.is_open())
@@ -174,7 +169,7 @@ class Customer_Details
                     break;
                 }
             }
-            
+
             if(id_no!=0)
             {
                 cout<<"Enter the Money to be Transferred : ";
@@ -185,6 +180,7 @@ class Customer_Details
                 {
                     user_data[id_no].Account_balance+=Money_transfer;
                     Account_balance-=Money_transfer;
+                    cout<<"Money Transfer Successfully."<<endl;
                 }
             }
             else
@@ -203,27 +199,41 @@ class ATM_Process : public Customer_Details
         int id;
         void Load_Cash()
         {
+            int note,number,total;
+            fstream Cash;
+            Cash.open("ATM_Cash.txt",ios::in);
+            if(Cash.is_open())
+            {
+                while(Cash>>note>>number>>total)
+                {
+                    ATM_Cash.push_back(total);
+                }
+                Cash.close();
+            }
+
             cout<<"ATM Balance = "<<ATM_balance<<endl;
             cout<<"Is it Required to Feed the Money into the ATM (Y/N): ";
             cin>>Feed_cash;
+            int TT=0,FH=0,H=0;
             if(Feed_cash=='Y')
             {
                 cout<<endl<<"Enter the Number of 2,000 Currency Notes to be feed into the ATM : ";
-                cin>>Two_thousand;
+                cin>>TT;
                 cout<<"Enter the Number of 500 Currency Notes to be feed into the ATM : ";
-                cin>>Five_hundred;
+                cin>>FH;
                 cout<<"Enter the Number of 100  Currency Notes to be feed into the ATM : ";
-                cin>>Hundred;
-            
-                ATM_balance=(2000*Two_thousand) + (500*Five_hundred) + (100*Hundred);
+                cin>>H;
 
+                Two_thousand+=TT;
+                Five_hundred+=FH;
+                Hundred+=H;
+
+                ATM_balance=(2000*Two_thousand) + (500*Five_hundred) + (100*Hundred);
+                
                 fstream Cash;
                 Cash.open("ATM_Cash.txt",ios::out);
                 if(Cash.is_open())
                 {
-                    Cash<<"Money Feeded into the ATM, Dispalying it's Denominations."<<endl;
-
-                    Cash<<endl<<left<<setw(20)<<"Denomination"<<left<<setw(20)<<"Number"<<left<<setw(20)<<"Value"<<endl;
                     Cash<<left<<setw(20)<<"2000"<<left<<setw(20)<<Two_thousand<<left<<setw(20)<<2000*Two_thousand<<endl;
                     Cash<<left<<setw(20)<<"500"<<left<<setw(20)<<Five_hundred<<left<<setw(20)<<500*Five_hundred<<endl;
                     Cash<<left<<setw(20)<<"100"<<left<<setw(20)<<Hundred<<left<<setw(20)<<100*Hundred<<endl;
@@ -241,6 +251,7 @@ class ATM_Process : public Customer_Details
 
         int using_ATM(int a_num,int p_num)
         {
+            int symbol;
             User_acc_num=a_num;
             User_pin_num=p_num;
 
@@ -275,20 +286,5 @@ class ATM_Process : public Customer_Details
             cout<<left<<setw(20)<<"100"<<left<<setw(20)<<Hundred<<left<<setw(20)<<100*Hundred<<endl;
 
             cout<<"Total Amount available in the ATM = "<<ATM_balance<<" ₹"<<endl;
-
-            fstream Cash;
-            Cash.open("ATM_Cash.txt",ios::out);
-            if(Cash.is_open())
-            {
-                Cash<<"Money Feeded into the ATM, Dispalying it's Denominations."<<endl;
-
-                Cash<<endl<<left<<setw(20)<<"Denomination"<<left<<setw(20)<<"Number"<<left<<setw(20)<<"Value"<<endl;
-                Cash<<left<<setw(20)<<"2000"<<left<<setw(20)<<Two_thousand<<left<<setw(20)<<2000*Two_thousand<<endl;
-                Cash<<left<<setw(20)<<"500"<<left<<setw(20)<<Five_hundred<<left<<setw(20)<<500*Five_hundred<<endl;
-                Cash<<left<<setw(20)<<"100"<<left<<setw(20)<<Hundred<<left<<setw(20)<<100*Hundred<<endl;
-
-                Cash<<endl<<"ATM Balance = "<<ATM_balance<<endl;
-                Cash.close();
-            }
         }
 };
