@@ -5,16 +5,19 @@ int main()
     ATM_Process user;
     cout<<right<<setw(70)<<"! . . . ZOHO Corporation Bank . . . !"<<endl;
 
-    int select=0,users_count;
-    int acc_num,pin_num;
-    int a_num,p_num,check,button;
-    double acc_bal;
+    int select=0,users_count=0;
+    int acc_num=0,pin_num=0;
+    int a_num=0,p_num=0,check=0,button=0;
+    double acc_bal=0;
     string acc_name;
     char data;
 
     user.Read_Customer_Details();
+    ATM_Process::Read_ATM_Cash();
+    
     while(1)
     {
+        ATM_Process::Write_ATM_Cash();
         cout<<"__________________________________________________________________________________________________";
         cout<<"\nATM Main Menu : "<<endl;
         cout<<"\n1. Load Cash to ATM. \n2. Show Customer Details. \n3. Show ATM Operations. \n4. Exit ATM."<<endl;
@@ -48,6 +51,7 @@ int main()
                                     break;
                             case 2:
                                     user_data[check].withdraw_money();
+                                    user.Write_ATM_Cash();
                                     break;
                             case 3:
                                     user_data[check].transfer_money();
